@@ -2,8 +2,10 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
  * Click nbfs://nbhost/SystemFileSystem/Templates/GUIForms/JFrame.java to edit this template
  */
-package gamesstore;
+package Login.vista;
 
+import Login.beans.Usuario;
+import Login.logic.UsuarioLogic;
 import java.awt.Image;
 import java.awt.Toolkit;
 import java.util.ArrayList;
@@ -16,6 +18,8 @@ import javax.swing.table.DefaultTableModel;
  * @author kevin
  */
 public class GameStoreCOL extends javax.swing.JFrame {
+    
+    private static GameStoreCOL gameStoreCOL;
     
     String juegos[]={"Halo: The Master Chief Collection", "Call of Duty Modern Warfare", "Fall Guys", "Battlefield 4™ Premium Edition", "Titanfall® 2", "Mortal Kombat X", "Gears 5", "Grand Theft Auto V", "Halo Infinite", "DRAGON BALL XENOVERSE 2"};
     double precios[]={89.900, 91.232, 25.435, 159.999, 99.999, 16.249, 179.900, 94.725, 214.900, 23.100};
@@ -48,7 +52,14 @@ public class GameStoreCOL extends javax.swing.JFrame {
         actualizarTabla();
         calcularPrecio();
     }
-
+    
+    public static GameStoreCOL getInstance(){
+        if(gameStoreCOL==null)
+            gameStoreCOL=new GameStoreCOL();
+        return gameStoreCOL;
+    }
+    
+   
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -79,6 +90,7 @@ public class GameStoreCOL extends javax.swing.JFrame {
         jLabel15 = new javax.swing.JLabel();
         lblLogoCol = new javax.swing.JLabel();
         jLabel16 = new javax.swing.JLabel();
+        btnEliminar = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         getContentPane().setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
@@ -87,32 +99,32 @@ public class GameStoreCOL extends javax.swing.JFrame {
         jLabel1.setFont(new java.awt.Font("Tahoma", 1, 18)); // NOI18N
         jLabel1.setText("IMPORTE");
         jLabel1.setToolTipText("");
-        getContentPane().add(jLabel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(350, 190, -1, -1));
+        getContentPane().add(jLabel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(360, 240, -1, -1));
 
         jLabel2.setFont(new java.awt.Font("Tahoma", 1, 18)); // NOI18N
         jLabel2.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
         jLabel2.setText("CANTIDAD");
         jLabel2.setToolTipText("");
-        getContentPane().add(jLabel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 190, -1, -1));
+        getContentPane().add(jLabel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(40, 240, -1, -1));
 
         lblImporte.setFont(new java.awt.Font("Tahoma", 1, 18)); // NOI18N
         lblImporte.setHorizontalAlignment(javax.swing.SwingConstants.RIGHT);
         lblImporte.setText("$0.00 COP");
         lblImporte.setToolTipText("");
-        getContentPane().add(lblImporte, new org.netbeans.lib.awtextra.AbsoluteConstraints(450, 190, -1, -1));
+        getContentPane().add(lblImporte, new org.netbeans.lib.awtextra.AbsoluteConstraints(460, 240, -1, -1));
 
         jLabel4.setFont(new java.awt.Font("Tahoma", 1, 18)); // NOI18N
         jLabel4.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
         jLabel4.setText("JUEGO");
         jLabel4.setToolTipText("");
-        getContentPane().add(jLabel4, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 150, -1, -1));
+        getContentPane().add(jLabel4, new org.netbeans.lib.awtextra.AbsoluteConstraints(40, 200, -1, -1));
 
         btnAgregar.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnAgregarActionPerformed(evt);
             }
         });
-        getContentPane().add(btnAgregar, new org.netbeans.lib.awtextra.AbsoluteConstraints(580, 140, 70, 70));
+        getContentPane().add(btnAgregar, new org.netbeans.lib.awtextra.AbsoluteConstraints(590, 190, 70, 70));
 
         nameJuego.setFont(new java.awt.Font("Tahoma", 1, 18)); // NOI18N
         nameJuego.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
@@ -122,7 +134,7 @@ public class GameStoreCOL extends javax.swing.JFrame {
                 nameJuegoActionPerformed(evt);
             }
         });
-        getContentPane().add(nameJuego, new org.netbeans.lib.awtextra.AbsoluteConstraints(140, 150, 200, 30));
+        getContentPane().add(nameJuego, new org.netbeans.lib.awtextra.AbsoluteConstraints(150, 200, 200, 30));
 
         spnCantidad.setFont(new java.awt.Font("Tahoma", 1, 18)); // NOI18N
         spnCantidad.setModel(new javax.swing.SpinnerNumberModel(1, 1, 10, 1));
@@ -132,7 +144,7 @@ public class GameStoreCOL extends javax.swing.JFrame {
                 spnCantidadStateChanged(evt);
             }
         });
-        getContentPane().add(spnCantidad, new org.netbeans.lib.awtextra.AbsoluteConstraints(140, 190, 80, 30));
+        getContentPane().add(spnCantidad, new org.netbeans.lib.awtextra.AbsoluteConstraints(150, 240, 80, 30));
 
         jScrollPane1.setToolTipText("");
 
@@ -150,51 +162,51 @@ public class GameStoreCOL extends javax.swing.JFrame {
         ));
         jScrollPane1.setViewportView(tblJuegos);
 
-        getContentPane().add(jScrollPane1, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 240, 620, 200));
+        getContentPane().add(jScrollPane1, new org.netbeans.lib.awtextra.AbsoluteConstraints(40, 290, 620, 200));
 
         jLabel7.setFont(new java.awt.Font("Tahoma", 1, 18)); // NOI18N
         jLabel7.setText("PRECIO");
         jLabel7.setToolTipText("");
-        getContentPane().add(jLabel7, new org.netbeans.lib.awtextra.AbsoluteConstraints(350, 150, -1, -1));
+        getContentPane().add(jLabel7, new org.netbeans.lib.awtextra.AbsoluteConstraints(360, 200, -1, -1));
 
         jLabel8.setFont(new java.awt.Font("Tahoma", 1, 18)); // NOI18N
         jLabel8.setText("IVA");
         jLabel8.setToolTipText("");
-        getContentPane().add(jLabel8, new org.netbeans.lib.awtextra.AbsoluteConstraints(350, 490, -1, -1));
+        getContentPane().add(jLabel8, new org.netbeans.lib.awtextra.AbsoluteConstraints(360, 540, -1, -1));
 
         jLabel9.setFont(new java.awt.Font("Tahoma", 1, 18)); // NOI18N
         jLabel9.setText("TOTAL");
         jLabel9.setToolTipText("");
-        getContentPane().add(jLabel9, new org.netbeans.lib.awtextra.AbsoluteConstraints(350, 520, -1, -1));
+        getContentPane().add(jLabel9, new org.netbeans.lib.awtextra.AbsoluteConstraints(360, 570, -1, -1));
 
         lblSubtotal.setFont(new java.awt.Font("Tahoma", 1, 18)); // NOI18N
         lblSubtotal.setHorizontalAlignment(javax.swing.SwingConstants.RIGHT);
         lblSubtotal.setText("$0.00 COP");
         lblSubtotal.setToolTipText("");
-        getContentPane().add(lblSubtotal, new org.netbeans.lib.awtextra.AbsoluteConstraints(490, 460, 140, 20));
+        getContentPane().add(lblSubtotal, new org.netbeans.lib.awtextra.AbsoluteConstraints(500, 510, 140, 20));
 
         lblIVA.setFont(new java.awt.Font("Tahoma", 1, 18)); // NOI18N
         lblIVA.setHorizontalAlignment(javax.swing.SwingConstants.RIGHT);
         lblIVA.setText("$0.00 COP");
         lblIVA.setToolTipText("");
-        getContentPane().add(lblIVA, new org.netbeans.lib.awtextra.AbsoluteConstraints(470, 490, 160, -1));
+        getContentPane().add(lblIVA, new org.netbeans.lib.awtextra.AbsoluteConstraints(480, 540, 160, -1));
 
         jLabel12.setFont(new java.awt.Font("Tahoma", 1, 18)); // NOI18N
         jLabel12.setText("SUBTOTAL");
         jLabel12.setToolTipText("");
-        getContentPane().add(jLabel12, new org.netbeans.lib.awtextra.AbsoluteConstraints(350, 460, -1, 20));
+        getContentPane().add(jLabel12, new org.netbeans.lib.awtextra.AbsoluteConstraints(360, 510, -1, 20));
 
         lblTotal.setFont(new java.awt.Font("Tahoma", 1, 18)); // NOI18N
         lblTotal.setHorizontalAlignment(javax.swing.SwingConstants.RIGHT);
         lblTotal.setText("$0.00 COP");
         lblTotal.setToolTipText("");
-        getContentPane().add(lblTotal, new org.netbeans.lib.awtextra.AbsoluteConstraints(470, 520, 160, 20));
+        getContentPane().add(lblTotal, new org.netbeans.lib.awtextra.AbsoluteConstraints(480, 570, 160, 20));
 
         lblPrecio.setFont(new java.awt.Font("Tahoma", 1, 18)); // NOI18N
         lblPrecio.setHorizontalAlignment(javax.swing.SwingConstants.RIGHT);
         lblPrecio.setText("$0.00 COP");
         lblPrecio.setToolTipText("");
-        getContentPane().add(lblPrecio, new org.netbeans.lib.awtextra.AbsoluteConstraints(450, 150, -1, -1));
+        getContentPane().add(lblPrecio, new org.netbeans.lib.awtextra.AbsoluteConstraints(460, 200, -1, -1));
 
         jLabel15.setFont(new java.awt.Font("Arial Black", 1, 36)); // NOI18N
         jLabel15.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
@@ -206,6 +218,9 @@ public class GameStoreCOL extends javax.swing.JFrame {
         jLabel16.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         jLabel16.setText("GAME STORE COLOMBIA");
         getContentPane().add(jLabel16, new org.netbeans.lib.awtextra.AbsoluteConstraints(120, 50, 430, 70));
+
+        btnEliminar.setText("Eliminar");
+        getContentPane().add(btnEliminar, new org.netbeans.lib.awtextra.AbsoluteConstraints(50, 530, 100, 40));
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
@@ -327,6 +342,7 @@ public class GameStoreCOL extends javax.swing.JFrame {
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnAgregar;
+    private javax.swing.JButton btnEliminar;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel12;
     private javax.swing.JLabel jLabel15;
